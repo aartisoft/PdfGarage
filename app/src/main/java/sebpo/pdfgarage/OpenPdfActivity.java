@@ -40,21 +40,10 @@ public class OpenPdfActivity extends AppCompatActivity {
         pdfView = findViewById(R.id.pdfView);
         pdfView.fromAsset("sample.pdf").load();
 
-        btn_create_jpg = findViewById(R.id.btn_create_jpg);
-        btn_create_jpg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                //Bitmap bitmap = pdfView.getDrawingCache();
-            }
-        });
-
     }
 
 
-
-    private File createFileFromInputStream() {
+    /*private File createFileFromInputStream() {
 
 
         //File file = createFileFromInputStream(inputStream);
@@ -81,7 +70,7 @@ public class OpenPdfActivity extends AppCompatActivity {
         }
 
         return null;
-    }
+    }*/
 
 
 }

@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
@@ -29,10 +31,14 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private static final int PICKFILE_RESULT_CODE = 2121;
-    Button button_select, button_open_file_explorer, button_collect_text;
+    Button button_select, button_open_file_explorer, button_collect_image,
+            button_collect_text;
     private int your_page_num = 1;
     Activity activity;
     TextView textview;
+    String filePathString;
+    File filePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +51,14 @@ public class HomeActivity extends AppCompatActivity {
 
         button_select = findViewById(R.id.button_select);
         button_open_file_explorer = findViewById(R.id.button_open_file_explorer);
+        button_collect_image = findViewById(R.id.button_collect_image);
         button_collect_text = findViewById(R.id.button_collect_text);
-
-
         textview = findViewById(R.id.fileName);
+
+
         button_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //openFileExlorer();
-//                CopyReadAssets();
                 openPDF();
             }
         });
@@ -66,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        button_collect_text.setOnClickListener(new View.OnClickListener() {
+        button_collect_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -75,7 +80,14 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        // createAFile();
+
+
+        button_collect_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                extractText(filePathString);
+            }
+        });
     }
 
     public void openFileExlorer() {
@@ -100,12 +112,11 @@ public class HomeActivity extends AppCompatActivity {
                     public void onChoosePath(String path, File pathFile) {
                         Toast.makeText(activity, "FILE: " + path, Toast.LENGTH_SHORT).show();
                         filePath = pathFile;
-
+                        filePathString = path;
                     }
                 })
                 .build()
                 .show();
-
     }
 
     private void CopyReadAssets() {
@@ -183,9 +194,6 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    String filePathString;
-    File filePath;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Fix no activity available
@@ -197,7 +205,6 @@ public class HomeActivity extends AppCompatActivity {
                     filePathString = data.getData().getPath();
                     Uri uri = data.getData();
                     textview.setText(filePathString);
-                    filePath = new File(uri.getPath());
                     showToast(uri.toString());
                 }
         }
@@ -207,10 +214,23 @@ public class HomeActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-
     void openPDF() {
         startActivity(new Intent(this, OpenPdfActivity.class));
     }
 
+    void extractText(String path) {
+        try {
+            String parsedText = "";
+            PdfReader reader = new PdfReader(path);
+            int n = reader.getNumberOfPages();
+            for (int i = 0; i < n; i++) {
+                parsedText = parsedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim() + "\n"; //Extracting the content from the different pages
+            }
+            System.out.println(parsedText);
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 }
 
