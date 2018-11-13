@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".HomeActivity"
+    tools:showIn="@layout/activity_home">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click to select a pdf file"
+
+        />
+
+    <Button
+        android:id="@+id/button_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open From Asset"
+
+        />
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="File Name"
+
+        />
+
+    <Button
+        android:id="@+id/button_open_file_explorer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open File Explorer"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="219dp" />
+
+
+    <Button
+        android:id="@+id/button_collect_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Collect Text"
+        tools:layout_editor_absoluteX="158dp"
+        tools:layout_editor_absoluteY="218dp" />
+</LinearLayout>

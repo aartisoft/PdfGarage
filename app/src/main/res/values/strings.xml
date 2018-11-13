@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PdfGarage</string>
+    <string name="action_settings">Settings</string>
+    <string name="pick_image_intent_text">Pick An Intent</string>
+    <string name="location_permission_denied">Denied !!!!!</string>
+    <string name="permission_required_toast">Permission Required</string>
+    <string name="permission_rationale_location">Permission Rational</string>
+    <string name="title_activity_open_pdf">OpenPdfActivity</string>
+</resources>
