@@ -45,7 +45,6 @@ public class OpenPdfActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                createJPG();
 
                 //Bitmap bitmap = pdfView.getDrawingCache();
             }
@@ -53,42 +52,7 @@ public class OpenPdfActivity extends AppCompatActivity {
 
     }
 
-    /* */
-    void createJPG() {
 
-        PdfiumCore pdfiumCore = new PdfiumCore(activity);
-        int pageNum = your_page_num;
-
-        try {
-            com.shockwave.pdfium.PdfDocument pdf = pdfiumCore.newDocument(
-                    ParcelFileDescriptor.open(createFileFromInputStream(),
-                            ParcelFileDescriptor.MODE_READ_WRITE)
-            );
-
-            pdfiumCore.openPage(pdf, pageNum);
-
-            int width = pdfiumCore.getPageWidth(pdf, pageNum);
-            int height = pdfiumCore.getPageHeight(pdf, pageNum);
-
-            Bitmap cbitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            pdfiumCore.renderPageBitmap(pdf, cbitmap, your_page_num, 0, 0, width, height);
-
-            pdfiumCore.closeDocument(pdf);
-
-            new File(Environment.getExternalStorageDirectory() + "/PDF Reader").
-                    mkdirs();
-            File outputFile = new File(Environment.getExternalStorageDirectory() +
-                    "/PDF Reader", "temp_img.jpg");
-            FileOutputStream outputStream = new FileOutputStream(outputFile);
-
-            cbitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-            outputStream.close();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-    }
 
     private File createFileFromInputStream() {
 

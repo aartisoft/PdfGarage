@@ -1,5 +1,6 @@
 package sebpo.pdfgarage;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -14,10 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.obsez.android.lib.filechooser.ChooserDialog;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,6 +30,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final int PICKFILE_RESULT_CODE = 2121;
     Button button_select, button_open_file_explorer, button_collect_text;
+    private int your_page_num = 1;
+    Activity activity;
+    TextView textview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +41,14 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        activity = this;
 
         button_select = findViewById(R.id.button_select);
         button_open_file_explorer = findViewById(R.id.button_open_file_explorer);
         button_collect_text = findViewById(R.id.button_collect_text);
 
+
+        textview = findViewById(R.id.fileName);
         button_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,11 +58,21 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         button_open_file_explorer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileExlorer();
+                //openFileExlorer();
+                openFileWithLibrary();
+            }
+        });
+
+        button_collect_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PDFUtils.createJPG(your_page_num, activity,
+                        filePath.getAbsoluteFile());
+
             }
         });
         // createAFile();
@@ -62,12 +81,30 @@ public class HomeActivity extends AppCompatActivity {
     public void openFileExlorer() {
         Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
         //fileintent.setType("gagt/sdf");
-        fileintent.setType("file/*");
+        //fileintent.setType("file/*");
+        fileintent.setType("*/*");
         try {
             startActivityForResult(fileintent, PICKFILE_RESULT_CODE);
         } catch (ActivityNotFoundException e) {
             Log.e("tag", "No activity can handle picking a file. Showing alternatives.");
         }
+
+    }
+
+    public void openFileWithLibrary() {
+
+        new ChooserDialog().with(this)
+//                .withStartFile(path)
+                .withChosenListener(new ChooserDialog.Result() {
+                    @Override
+                    public void onChoosePath(String path, File pathFile) {
+                        Toast.makeText(activity, "FILE: " + path, Toast.LENGTH_SHORT).show();
+                        filePath = pathFile;
+
+                    }
+                })
+                .build()
+                .show();
 
     }
 
@@ -146,6 +183,9 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    String filePathString;
+    File filePath;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Fix no activity available
@@ -154,8 +194,11 @@ public class HomeActivity extends AppCompatActivity {
         switch (requestCode) {
             case PICKFILE_RESULT_CODE:
                 if (resultCode == RESULT_OK) {
-                    String FilePath = data.getData().getPath();
-                    showToast(FilePath);
+                    filePathString = data.getData().getPath();
+                    Uri uri = data.getData();
+                    textview.setText(filePathString);
+                    filePath = new File(uri.getPath());
+                    showToast(uri.toString());
                 }
         }
     }
@@ -164,24 +207,6 @@ public class HomeActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    /**
-     * CREATE A FILE
-     */
-
-    private void createAFile() {
-        String filename = "myfile";
-        String fileContents = "Hello world!";
-        FileOutputStream outputStream;
-
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(fileContents.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     void openPDF() {
         startActivity(new Intent(this, OpenPdfActivity.class));

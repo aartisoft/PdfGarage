@@ -10,30 +10,20 @@
     tools:showIn="@layout/activity_home">
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click to select a pdf file"
-
-        />
-
     <Button
         android:id="@+id/button_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open From Asset"
+        android:text="Open PDF From Asset"
 
         />
-
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="File Name"
+        android:text="Click to select a pdf file" />
 
-        />
 
     <Button
         android:id="@+id/button_open_file_explorer"
@@ -42,6 +32,13 @@
         android:text="Open File Explorer"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="219dp" />
+
+
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="File Name" />
 
 
     <Button
