@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".CreatePDF"
+    tools:showIn="@layout/activity_create_pdf">
+
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:layout_margin="@dimen/fab_margin"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/button_create_pdf"
+        android:layout_width="match_parent"
+        android:text="Create PDF"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_below="@+id/editText"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

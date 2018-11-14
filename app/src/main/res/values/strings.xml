@@ -6,4 +6,5 @@
     <string name="permission_required_toast">Permission Required</string>
     <string name="permission_rationale_location">Permission Rational</string>
     <string name="title_activity_open_pdf">OpenPdfActivity</string>
+    <string name="title_activity_create_pdf">CreatePDF</string>
 </resources>
