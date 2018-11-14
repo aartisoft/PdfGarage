@@ -12,7 +12,7 @@
 
     <Button
         android:id="@+id/button_select"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Open PDF From Asset"
 
@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/button_open_file_explorer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Open File Explorer"
         tools:layout_editor_absoluteX="27dp"
@@ -43,7 +43,7 @@
 
     <Button
         android:id="@+id/button_collect_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Collect Image"
         tools:layout_editor_absoluteX="158dp"
@@ -52,7 +52,7 @@
 
     <Button
         android:id="@+id/button_collect_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Collect Text"
         tools:layout_editor_absoluteX="158dp"
@@ -66,10 +66,10 @@
 
 
     <TextView
-        android:id="@+id/textview_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/textview_text_from_pdf"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="" />
+        android:text="asdsadasdsada" />
 
 
 </LinearLayout>
