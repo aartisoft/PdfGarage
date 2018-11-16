@@ -31,3 +31,7 @@ dependencies {
     implementation 'com.itextpdf:itextg:5.5.10'
 
 }
+
+task shihabOWN{
+    System.out.println("Hello Gradle!");
+}

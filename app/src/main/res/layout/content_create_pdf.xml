@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".CreatePDF"
+    tools:context=".CreatePDFActivity"
     tools:showIn="@layout/activity_create_pdf">
-
 
     <EditText
         android:id="@+id/editText"

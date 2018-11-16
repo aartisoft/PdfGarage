@@ -28,15 +28,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static sebpo.pdfgarage.PDFUtils.extractText;
+
 public class HomeActivity extends AppCompatActivity {
 
 
     private static final int PICKFILE_RESULT_CODE = 2121;
     Button button_select, button_open_file_explorer, button_collect_image,
-            button_collect_text;
-    private int your_page_num = 1;
+            button_collect_text, button_create_pdf;
+    private int your_page_num = 0;
     Activity activity;
-    TextView textview,textview_text_from_pdf;
+    TextView textview, textview_text_from_pdf;
     String filePathString;
     File filePath;
 
@@ -54,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         button_open_file_explorer = findViewById(R.id.button_open_file_explorer);
         button_collect_image = findViewById(R.id.button_collect_image);
         button_collect_text = findViewById(R.id.button_collect_text);
+        button_create_pdf = findViewById(R.id.button_create_pdf);
         textview = findViewById(R.id.fileName);
         textview_text_from_pdf = findViewById(R.id.textview_text_from_pdf);
 
@@ -77,12 +80,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                PDFUtils.createJPG(your_page_num, activity,
-                        filePath.getAbsoluteFile());
+                if (filePath != null) {
+                    PDFUtils.createJPG(your_page_num, HomeActivity.this,
+                            filePath.getAbsoluteFile());
+                }
+
 
             }
         });
-
 
         button_collect_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +95,14 @@ public class HomeActivity extends AppCompatActivity {
                 // extractText(filePathString);
 
                 new TextAsync().execute();
+            }
+        });
+
+        button_create_pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(HomeActivity.this, CreatePDFActivity.class));
             }
         });
     }
@@ -117,6 +130,7 @@ public class HomeActivity extends AppCompatActivity {
                         Toast.makeText(activity, "FILE: " + path, Toast.LENGTH_SHORT).show();
                         filePath = pathFile;
                         filePathString = path;
+                        textview.setText(filePathString);
                     }
                 })
                 .build()
@@ -198,21 +212,21 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Fix no activity available
-        if (data == null)
-            return;
-        switch (requestCode) {
-            case PICKFILE_RESULT_CODE:
-                if (resultCode == RESULT_OK) {
-                    filePathString = data.getData().getPath();
-                    Uri uri = data.getData();
-                    textview.setText(filePathString);
-                    showToast(uri.toString());
-                }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        // TODO Fix no activity available
+//        if (data == null)
+//            return;
+//        switch (requestCode) {
+//            case PICKFILE_RESULT_CODE:
+//                if (resultCode == RESULT_OK) {
+//                    filePathString = data.getData().getPath();
+//                    Uri uri = data.getData();
+//                    textview.setText(filePathString);
+//                    showToast(uri.toString());
+//                }
+//        }
+//    }
 
     void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -222,42 +236,11 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(new Intent(this, OpenPdfActivity.class));
     }
 
-    void extractText(String path) {
-        try {
-            String parsedText = "";
-            PdfReader reader = new PdfReader(path);
-            int n = reader.getNumberOfPages();
-            for (int i = 0; i < n; i++) {
-                parsedText = parsedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim() + "\n"; //Extracting the content from the different pages
-            }
-            System.out.println(parsedText);
-            reader.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    class TextAsync extends AsyncTask<Void,Void,String>{
-
+    class TextAsync extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
-
-            String parsedText = "";
-            try {
-                PdfReader reader = new PdfReader(filePathString);
-                int n = reader.getNumberOfPages();
-                for (int i = 0; i < n; i++) {
-                    parsedText = parsedText +
-                            PdfTextExtractor.getTextFromPage(reader, i + 1).trim() + "\n";
-                    //Extracting the content from the different pages
-                }
-                System.out.println(parsedText);
-                reader.close();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-            return parsedText;
+            return extractText(filePathString);
         }
 
         @Override
