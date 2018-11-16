@@ -1,4 +1,4 @@
-package sebpo.pdfgarage;
+package sebpo.pdfgarage.utility;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

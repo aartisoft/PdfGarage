@@ -8,7 +8,9 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +33,31 @@ import static sebpo.pdfgarage.utility.LogMe.LOGE;
 
 public class FileUtils {
 
+    /** From
+     *
+     * https://developer.android.com/training/data-storage/files#java
+     *
+     * */
+
+    /**
+
+     After you request storage permissions and verify that storage is available,
+    you can save two different types of files:
+
+    Public files: Files that should be freely available to other apps and to the
+    user. When the user uninstalls your app, these files should remain available to
+    the user. For example, photos captured by your app or other downloaded files
+    should be saved as public files.
+
+
+    Private files: Files that rightfully belong to your app and will be deleted
+    when the user uninstalls your app. Although these files are technically
+    accessible by the user and other apps because they are on the external
+    storage, they don't provide value to the user outside of your app.
+
+    */
+
+    private static final String TAG = FileUtils.class.getName();
     private static final String extensions[] = new String[]{"avi", "3gp", "mp4", "mp3", "jpeg", "jpg",
             "gif", "png",
             "pdf", "docx", "doc", "xls", "xlsx", "csv", "ppt", "pptx",
@@ -69,6 +96,7 @@ public class FileUtils {
         } else if (urlString.toLowerCase().contains(".pdf")) {
             // PDF file
             intent.setDataAndType(uri, "application/pdf");
+
         } else if (urlString.toLowerCase().contains(".ppt")
                 || urlString.toLowerCase().contains(".pptx")) {
             // Powerpoint file
@@ -117,6 +145,8 @@ public class FileUtils {
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
         context.startActivity(intent);
     }
 
@@ -279,4 +309,67 @@ public class FileUtils {
     public static String getExtension(String path) {
         return path.contains(".") ? path.substring(path.lastIndexOf(".") + 1).toLowerCase() : "";
     }
+
+
+    public File getPrivateAlbumStorageDir(Context context, String albumName) {
+        // Get the directory for the app's private pictures directory.
+        File file = new File(context.getExternalFilesDir(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            Log.e(TAG, "Directory not created");
+        }
+        return file;
+    }
+
+
+    public File getPublicAlbumStorageDir(String albumName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            Log.e(TAG, "Directory not created");
+        }
+        return file;
+    }
+
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     *  If the system runs low on storage, it may delete your cache files
+     *  without warning, so make sure you check for the
+     *  existence of your cache files before reading them.
+     *
+     * */
+    private File getTempFile(Context context, String url) {
+        File file = null;
+        try {
+            String fileName = Uri.parse(url).getLastPathSegment();
+            file = File.createTempFile(fileName, null, context.getCacheDir());
+        } catch (IOException e) {
+            // Error while creating file
+        }
+        return file;
+    }
+
+
+
 }

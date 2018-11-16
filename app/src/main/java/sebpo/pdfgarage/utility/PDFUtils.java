@@ -1,4 +1,4 @@
-package sebpo.pdfgarage;
+package sebpo.pdfgarage.utility;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
-import com.github.barteksc.pdfviewer.util.FileUtils;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -29,8 +28,6 @@ import com.shockwave.pdfium.PdfiumCore;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import sebpo.pdfgarage.utility.LogMe;
 
 public class PDFUtils {
 
@@ -62,13 +59,24 @@ public class PDFUtils {
 
             pdfiumCore.closeDocument(pdf);
 
-            new File(Environment.getExternalStorageDirectory() + FOLDER_NAME).
-                    mkdirs();
-            File outputFile = new File(Environment.getExternalStorageDirectory() +
-                    FOLDER_NAME, "temp_img.jpg");
+            /** U can you public  / private directory : both works according to their name crieteria*/
+            // File folder= new File(Environment.getExternalStorageDirectory() + FOLDER_NAME);
+            File folder = new File(Environment.
+                    getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+
+                    FileUtils.getAppPath(activity));
+
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            //File outputFile = new File(Environment.getExternalStorageDirectory(), "temp_img.jpg");
+
+            File outputFile = new File(folder.getAbsolutePath()
+                    , "temp_img.jpg");
+
             FileOutputStream outputStream = new FileOutputStream(outputFile);
 
-            cbitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+            cbitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.close();
 
         } catch (IOException ex) {

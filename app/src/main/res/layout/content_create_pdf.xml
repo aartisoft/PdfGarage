@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".CreatePDFActivity"
+    tools:context=".activity.CreatePDFActivity"
     tools:showIn="@layout/activity_create_pdf">
 
     <EditText
@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:hint="Give PDF Name"
         android:ems="10"
         android:layout_margin="@dimen/fab_margin"
         android:inputType="textMultiLine" />

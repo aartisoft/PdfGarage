@@ -1,4 +1,4 @@
-package sebpo.pdfgarage;
+package sebpo.pdfgarage.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,14 +10,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
+
+import sebpo.pdfgarage.utility.PDFUtils;
+import sebpo.pdfgarage.R;
 import sebpo.pdfgarage.utility.ApplicationData;
 import sebpo.pdfgarage.utility.FileUtils;
-import sebpo.pdfgarage.utility.LogMe;
 
 public class CreatePDFActivity extends AppCompatActivity {
     private static final String TAG = "CreatePDFActivity";
     Button button_create_pdf;
     EditText editText;
+    String filePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,11 @@ public class CreatePDFActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (editText.getText().toString().length() > 0) {
-                    new CreateAsync().execute(editText.getText().toString());
+
+                    filePath = FileUtils.
+                            getAppPath(CreatePDFActivity.this) +
+                            editText.getText().toString();
+                    new CreateAsync().execute(filePath);
                 }
 
             }
@@ -48,17 +56,23 @@ public class CreatePDFActivity extends AppCompatActivity {
         protected String doInBackground(String... value) {
 
             Log.d(TAG, "doInBackground: " + value[0]);
-            PDFUtils.createPdf(FileUtils.
-                    getAppPath(CreatePDFActivity.this) +
-                    value[0], CreatePDFActivity.this);
-
+            PDFUtils.createPdf(value[0], CreatePDFActivity.this);
             return value[0];
         }
 
         @Override
         protected void onPostExecute(String s) {
-            ApplicationData.hideKeyboard(CreatePDFActivity.this);
-            Toast.makeText(getApplicationContext(), s + " .pdf is created.", Toast.LENGTH_LONG).show();
+
+            try {
+                FileUtils.openFile(CreatePDFActivity.this, new File(s));
+                ApplicationData.hideKeyboard(CreatePDFActivity.this);
+                Toast.makeText(getApplicationContext(),
+                        s + " .pdf is created.", Toast.LENGTH_LONG).show();
+
+            } catch (Exception o) {
+                Log.d(TAG, "onPostExecute: " + o.getLocalizedMessage());
+            }
+
         }
     }
 

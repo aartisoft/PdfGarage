@@ -1,4 +1,4 @@
-package sebpo.pdfgarage;
+package sebpo.pdfgarage.activity;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -19,8 +19,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
@@ -28,7 +26,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static sebpo.pdfgarage.PDFUtils.extractText;
+import sebpo.pdfgarage.utility.PDFUtils;
+import sebpo.pdfgarage.R;
+
+import static sebpo.pdfgarage.utility.PDFUtils.extractText;
 
 public class HomeActivity extends AppCompatActivity {
 
